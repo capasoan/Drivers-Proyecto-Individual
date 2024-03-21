@@ -5,8 +5,8 @@ module.exports = (sequelize) => {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: true,
       autoIncrement: true,
+      allowNull: false,
     },
     DriverId: {
       type: DataTypes.UUID,
@@ -15,6 +15,7 @@ module.exports = (sequelize) => {
         model: 'Drivers',
         key: 'id',
       },
+      foreignKey: true,
     },
     TeamId: {
       type: DataTypes.INTEGER,
@@ -23,6 +24,7 @@ module.exports = (sequelize) => {
         model: 'Teams',
         key: 'id',
       },
+      foreignKey: true,
     },
   }, { timestamps: false });
 };

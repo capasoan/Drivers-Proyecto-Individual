@@ -1,34 +1,62 @@
-const { Driver, Team, DriverTeam } = require('../db');
+const { Driver, DriverTeam, Team } = require('../db');
 
 const driverD = async (req, res) => {
-  const { idDriver } = req.params;
-
   try {
-    const conductor = await Driver.findByPk(idDriver);
+    const { idDriver } = req.params;
 
-    if (!conductor) {
-      return res.status(404).json({ error: "Conductor no encontrado" });
+    const driver = await Driver.findByPk(idDriver);
+
+    if (!driver) {
+      return res.status(404).json({ error: 'Conductor no encontrado' });
     }
 
-    const driverTeamEntry = await DriverTeam.findOne({
-      where: { DriverId: idDriver },
-    });
+    const driverTeams = await DriverTeam.findAll({ where: { DriverId: idDriver } });
+//console.log("driverTeams",driverTeams)
+    const teamsId = driverTeams.map(driverTeam => driverTeam.TeamId);
+    //console.log("teamsId",teamsId)
+    const teams = await Team.findAll({ where: { id: teamsId } });
+   // console.log("teams",teams)
 
-    if (!driverTeamEntry) {
-      return res.status(404).json({ error: "El conductor no está asociado a ningún equipo" });
-    }
+    res.status(200).json({ driver, teams });
 
-    const equipo = await Team.findByPk(driverTeamEntry.TeamId);
-
-    if (!equipo) {
-      return res.status(404).json({ error: "Equipo no encontrado" });
-    }
-
-    res.status(200).json({ conductor, equipo });
   } catch (error) {
-    console.error('Error al obtener la información del conductor y del equipo:', error);
-    res.status(500).json({ error: "Ocurrió un error al obtener la información del conductor y del equipo" });
+    res.status(500).json({ error: 'Error 500' });
   }
-};
+}
 
 module.exports = driverD;
+
+
+
+
+
+
+// const fs = require('fs');
+// const path = require('path');
+
+// const URL = path.resolve(__dirname, "../../api/db.json");
+
+// const driverDAPI = async(req, res) => {
+// try{
+
+//     const { idDriver } = req.params;
+//     const data = await fs.promises.readFile(URL, 'utf-8');
+//     const drivers = JSON.parse(data).drivers;
+    
+//     const driver = drivers.find(driver => driver.id === parseInt(idDriver));
+
+//     if(!driver){
+//         res.status(400).json({error: "conductor no encontrado"})
+//     }else{
+//       return  res.status(200).json(driver)
+//     }
+
+
+// }catch(error){
+//     console.log("ERROR", error);
+//     res.status(500).json({error:"Error 500"})
+// }
+   
+    
+// }
+// module.exports = driverDAPI;

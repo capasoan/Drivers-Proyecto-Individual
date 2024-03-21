@@ -1,3 +1,26 @@
+const fs = require('fs');
+const path = require('path')
+
+
+const URL = path.resolve(__dirname, "../../api/db.json");
+
+const allDrivers = async (req, res) => {
+
+    try {
+        const data = await fs.readFileSync(URL, 'utf-8');
+        const drivers = JSON.parse(data);
+        //console.log(data);
+        res.status(200).json(drivers);
+        } catch (error) {
+        res.status(404).json({ error: "Driver not found" });
+
+    }
+}
+
+
+module.exports = allDrivers;
+
+
 // const { Driver } = require('../db.js');
 
 // const allDrivers = async (req, res) => {
@@ -19,27 +42,3 @@
 
 
 
-
-
-
-    const fs = require('fs');
-const path = require('path')
-
-
-const URL = path.resolve(__dirname, "../../api/db.json");
-
-const allDrivers = async (req, res) => {
-
-    try {
-        const data = await fs.readFileSync(URL, 'utf-8');
-        const drivers = JSON.parse(data);
-        //console.log(data);
-        res.status(200).json(drivers);
-        } catch (error) {
-        res.status(404).json({ error: "Driver not found" });
-
-    }
-}
-
-
-module.exports = allDrivers;
