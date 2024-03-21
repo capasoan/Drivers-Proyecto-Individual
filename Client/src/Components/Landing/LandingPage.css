@@ -1,0 +1,10 @@
+.Landing-Page{
+    background-image: url('../../../assets/DRIVERSFOTO.jpg'); 
+    background-position: center;
+    height: 100vh; 
+    display: flex;
+    flex-direction: column;
+    align-items:first baseline;
+    justify-content:left;
+    color: white;
+}
